@@ -1,7 +1,7 @@
 local module = {}
 
 module.indicators = {
-    state = {type="humidity", unit = "%", range_start = 0, range_end = 100}
+    humidity = {type="humidity", unit = "%", range_start = 0, range_end = 100}
 }
 
 function module.get(key, config)
