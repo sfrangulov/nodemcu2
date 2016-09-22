@@ -2,7 +2,7 @@ local module = {}
 
 module.indicators = {
     temperature = {type="temperature", unit = "C", range_start = 0, range_end = 65},
-    humidity = {type="pressure", unit = "mm Hg", range_start = 0, range_end = 0}
+    pressure = {type="pressure", unit = "mm Hg", range_start = 0, range_end = 0}
 }
 
 function module.get(key, config)
