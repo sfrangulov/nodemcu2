@@ -48,6 +48,14 @@ function app.new_message(topic, data)
         return
     end   
     --
+    if (path[3] == "setinterval") then
+        for skey,svalue in pairs(app.config.node.sensors) do
+            app.config.node.sensors[skey].interval = data
+        end
+        app.mqtt.publish_task_result(topic, "done")
+        return
+    end   
+    --     
     if (path[3] == "resetlast") then
         for skey,svalue in pairs(app.config.node.sensors) do
             app.config.node.sensors[skey].last_res = {}

@@ -29,8 +29,8 @@ end
 function module.publish_data(topic, payload)
   for key,value in pairs(module.brokers) do
     if (module.online[key] ~= nil) then
+      prn("Publish "..app.config.mqtt[key].data_endpoint..topic.."="..payload)    
       module.brokers[key]:publish(app.config.mqtt[key].data_endpoint..topic, payload, 0, 0)
-      prn("Publish "..app.config.mqtt[key].data_endpoint..topic.."="..payload)
     end
   end
 end
@@ -38,8 +38,8 @@ end
 function module.publish_hello(payload)
   for key,value in pairs(module.brokers) do
     if (module.online[key] ~= nil) then
+      prn("Publish "..app.config.mqtt[key].hello_endpoint.."="..payload)    
       module.brokers[key]:publish(app.config.mqtt[key].hello_endpoint, payload, 0, 0)
-      prn("Publish "..app.config.mqtt[key].hello_endpoint.."="..payload)
     end
   end
 end
@@ -47,8 +47,8 @@ end
 function module.publish_task_result(topic, payload)
   for key,value in pairs(module.brokers) do
     if (module.online[key] ~= nil) then
+      prn("Publish "..topic.."/result="..payload)    
       module.brokers[key]:publish(topic.."/result", payload, 0, 0)
-      prn("Publish "..topic.."/result="..payload)
     end
   end
 end
@@ -63,8 +63,8 @@ function module.start()
       if data == nil then
         data = "~~~"
       end
+      prn("Task "..topic.."="..data)      
       app.new_message(topic, data)
-      prn("Task "..topic.."="..data)
     end)
   end
   connect()
