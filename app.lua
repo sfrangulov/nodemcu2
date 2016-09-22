@@ -48,6 +48,14 @@ function app.new_message(topic, data)
         return
     end   
     --
+    if (path[3] == "resetlast") then
+        for skey,svalue in pairs(app.config.node.sensors) do
+            app.config.node.sensors[skey].last_res = {}
+        end
+        app.mqtt.publish_task_result(topic, "done")
+        return
+    end   
+    --    
     id = split(path[3], ".")
     if (app.config.node.sensors[id[1]] == nil) then
          prn("Skip unknown task. Unknown sensor")
@@ -109,7 +117,8 @@ end
 
 function app.init()
     for skey,svalue in pairs(app.config.node.sensors) do
-        app[app.config.node.sensors[skey].module].init(skey,svalue)    
+        app[app.config.node.sensors[skey].module].init(skey,svalue)  
+        app.config.node.sensors[skey].last_res = {}   
     end
 end
 
@@ -119,10 +128,21 @@ function app.timer()
     for skey,svalue in pairs(app.config.node.sensors) do
         if (app.iteration%app.config.node.sensors[skey].interval == 0) then
             res = app[app.config.node.sensors[skey].module].get(skey,svalue)
+            local mode = "allways"
+            if (app.config.node.sensors[skey].mode ~= nil) then
+                mode = app.config.node.sensors[skey].mode
+            end 
             for rkey,rvalue in pairs(res) do
                 if (app.config.node.disabled[skey.."."..rkey] == nil) then
-                    app.mqtt.publish_data("/"..skey.."."..rkey, rvalue)
+                    if (mode == "allways" or
+                        (mode == "change" and
+                            app.config.node.sensors[skey].last_res[rkey] ~= res[rkey])) then
+                        app.mqtt.publish_data("/"..skey.."."..rkey, rvalue)
+                    end
                 end
+            end
+            if (mode == "change") then
+                app.config.node.sensors[skey].last_res = deepcopy(res)
             end
         end
     end

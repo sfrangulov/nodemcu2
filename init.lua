@@ -1,5 +1,5 @@
-dofile("misc.lua")
 table = require("table")
+dofile("misc.lua")
 _wifi = require("_wifi")
 app = require("app")
 
