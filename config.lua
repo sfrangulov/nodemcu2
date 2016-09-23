@@ -22,11 +22,11 @@ module.mqtt.dev_int = {
 }
 
 module.mqtt.dev_ext = {
-    host = "iot.eclipse.org",
-    port = 1883,
-    data_endpoint = "trs/data/"..module.id,
-    task_endpoint = "trs/task/"..module.id,
-    hello_endpoint = "trs/clients/"..module.id
+    host = "s2e24d843.fastvps-server.com",
+    port = 8081,
+    data_endpoint = "data/"..module.id,
+    task_endpoint = "task/"..module.id,
+    hello_endpoint = "clients/"..module.id
 }
 
 module.data_error = -999999
