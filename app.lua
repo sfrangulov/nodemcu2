@@ -144,7 +144,7 @@ function app.timer()
                 mode = app.config.node.sensors[skey].mode
             end 
             for rkey,rvalue in pairs(res) do
-                if (app.config.node.disabled[skey.."."..rkey] == nil and rvalue ~= config.data_error) then
+                if (app.config.node.disabled[skey.."."..rkey] == nil and rvalue ~= app.config.data_error) then
                     if (mode == "allways" or
                         (mode == "change" and
                             app.config.node.sensors[skey].last_res[rkey] ~= res[rkey])) then
