@@ -113,7 +113,7 @@ function app.start()
         if (app.mqtt.is_online() ~= 0) then
             tmr.stop(1)
             if (mdns ~= nil) then         
-                mdns.register(app.config.id, { description=app.config.id, service="telnet", port=22, location="" })
+                mdns.register(app.config.id, { description=app.config.id, service="telnet", port=23, location=app.config.node.location })
             end
             prn("============ Ready ==============")
             for skey,svalue in pairs(app.config.node.sensors) do

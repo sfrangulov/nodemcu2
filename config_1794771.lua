@@ -10,7 +10,8 @@ local module = {
         --,sound_1 = {module = "_aproc", type="sound", apin = 0, interval = 10}
         ,light_1 = {module = "_aproc", type="light", apin = 0, interval = 10, mode = "change"}
     },
-    disabled = {}
+    disabled = {},
+    location = "k39.test"
 }
 
 return module

@@ -6,7 +6,8 @@ local module = {
         ,relay_1 = {module = "_relay", pin = 2, interval = 10, auto_off = 3}
         ,soilhum_1 = {module = "_soilhum", pin = 3, apin = 0, interval = 600}
     },
-    disabled = {}
+    disabled = {},
+    location = "k39.flower"
 }
 
 return module
