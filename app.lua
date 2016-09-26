@@ -111,7 +111,10 @@ end
 function app.start()
     tmr.alarm(1, 1000, tmr.ALARM_AUTO, function()
         if (app.mqtt.is_online() ~= 0) then
-            tmr.stop(1)          
+            tmr.stop(1)
+            if (mdns ~= nil) then         
+                mdns.register(app.config.id, { description=app.config.id, service="telnet", port=22, location="" })
+            end
             prn("============ Ready ==============")
             for skey,svalue in pairs(app.config.node.sensors) do
                 app[svalue.module] = require(svalue.module)
@@ -135,13 +138,13 @@ function app.timer()
     local res = {}
     for skey,svalue in pairs(app.config.node.sensors) do
         if (app.iteration%app.config.node.sensors[skey].interval == 0) then
-            res = app[app.config.node.sensors[skey].module].get(skey,svalue)
+            res = app[app.config.node.sensors[skey].module].get(skey,svalue) 
             local mode = "allways"
             if (app.config.node.sensors[skey].mode ~= nil) then
                 mode = app.config.node.sensors[skey].mode
             end 
             for rkey,rvalue in pairs(res) do
-                if (app.config.node.disabled[skey.."."..rkey] == nil) then
+                if (app.config.node.disabled[skey.."."..rkey] == nil and rvalue ~= config.data_error) then
                     if (mode == "allways" or
                         (mode == "change" and
                             app.config.node.sensors[skey].last_res[rkey] ~= res[rkey])) then

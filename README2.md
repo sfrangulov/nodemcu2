@@ -26,3 +26,16 @@ MQTT команды для ноды:
 Wi-fi
     SSID: iot (точка скрыта, добавляется руками)
     password: Kitty12345
+
+Порт:
+ls /dev/cu.*
+
+Поиск нод с мака:
+dns-sd -B _telnet._tcp .
+
+Прошивка:
+python "../esptool/esptool.py" --port /dev/cu.wchusbserialfa1340 erase_flash
+python "../esptool/esptool.py" --port /dev/cu.wchusbserialfa1340 --baud 115200 write_flash --flash_freq 80m --flash_mode qio --flash_size 32m 0x0000 nodemcu-master-13-modules-2016-09-26-10-59-28-integer.bin 0x3FC000 esp_init_data_default.bin
+
+Зашить все скрипты:
+nodemcu-tool upload *.lua
