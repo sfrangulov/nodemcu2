@@ -26,6 +26,19 @@ function app.get_indicators()
     return msg.."}"
 end
 
+function app.get_full_description()
+    local desc = {}
+    for skey,svalue in pairs(app.config.node.sensors) do
+        local i = app[app.config.node.sensors[skey].module].indicators
+        if (svalue.type ~= nil) then
+            i = app[app.config.node.sensors[skey].module].indicators[svalue.type]    
+        end
+        desc[skey] = deepcopy(svalue)
+        desc[skey].indicators = deepcopy(i)
+    end
+    return cjson.encode(desc)
+end
+
 function app.hello()
     
     app.mqtt.publish_hello(app.get_indicators())
@@ -48,6 +61,11 @@ function app.new_message(topic, data)
         return
     end   
     --
+    if (path[3] == "getfulldescription") then
+        app.mqtt.publish_task_result(topic, app.get_full_description())
+        return
+    end   
+    --    
     if (path[3] == "setinterval") then
         for skey,svalue in pairs(app.config.node.sensors) do
             app.config.node.sensors[skey].interval = data
@@ -152,9 +170,7 @@ function app.timer()
                     end
                 end
             end
-            if (mode == "change") then
-                app.config.node.sensors[skey].last_res = deepcopy(res)
-            end
+            app.config.node.sensors[skey].last_res = deepcopy(res)
         end
     end
     app.iteration = app.iteration + 1
