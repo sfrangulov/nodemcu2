@@ -3,40 +3,20 @@ app.iteration = 0
 app.config = require("config")
 app.mqtt = require("_mqtt")
 
---app._dht11 = require("_dht11")
---app._relay = require("_relay")
---app._soilhum = require("_soilhum")
---app._bmp085 = require("_bmp085")
 
 function app.get_indicators()
-    local msg = "{"
+    local obj = {}
     for skey,svalue in pairs(app.config.node.sensors) do
-        local i = app[app.config.node.sensors[skey].module].indicators
-        if (svalue.type ~= nil) then
-            i = app[app.config.node.sensors[skey].module].indicators[svalue.type]    
-        end
-        for ikey,ivalue in pairs(i) do
-            if (msg ~= "{") then
-                msg = msg..","    
-            end
-            msg = msg.."\""..skey.."."..ikey.."\":\""..ivalue.type.."\""
+        for ikey,ivalue in pairs(app.config.node.sensors[skey].indicators) do
+            obj[skey.."."..ikey] = ivalue.type
         end
 
     end
-    return msg.."}"
+    return cjson.encode(obj)
 end
 
 function app.get_full_description()
-    local desc = {}
-    for skey,svalue in pairs(app.config.node.sensors) do
-        local i = app[app.config.node.sensors[skey].module].indicators
-        if (svalue.type ~= nil) then
-            i = app[app.config.node.sensors[skey].module].indicators[svalue.type]    
-        end
-        desc[skey] = deepcopy(svalue)
-        desc[skey].indicators = deepcopy(i)
-    end
-    return cjson.encode(desc)
+    return cjson.encode(app.config.node.sensors)
 end
 
 function app.hello()
@@ -100,7 +80,7 @@ function app.new_message(topic, data)
         return
     end
     --
-    if (id[2] ==nil or i[id[2]] == nil) then
+    if (id[2] ==nil or app.config.node.sensors[id[1]].indicators[id[2]] == nil) then
         prn("Skip unknown task. Unknown indicator")
         app.mqtt.publish_task_result(topic, "error")
         return        
@@ -136,6 +116,11 @@ function app.start()
             prn("============ Ready ==============")
             for skey,svalue in pairs(app.config.node.sensors) do
                 app[svalue.module] = require(svalue.module)
+                local i = app[app.config.node.sensors[skey].module].indicators
+                if (svalue.type ~= nil) then
+                    i = app[app.config.node.sensors[skey].module].indicators[svalue.type]    
+                end
+                app.config.node.sensors[skey].indicators = deepcopy(i)
             end
             app.hello()
             app.init()
