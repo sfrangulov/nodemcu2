@@ -15,6 +15,10 @@ function module.get(key, config)
   local p = bmp085.pressure()
   res.temperature = (t / 10).."."..(t % 10)
   res.pressure = (p * 75 / 10000).."."..((p * 75 % 10000) / 100)
+  if (res.pressure == "-230.70") then
+    res.temperature = app.config.data_error
+    res.pressure = app.config.data_error
+  end
   bmp085=nil
   package.loaded["bmp085"]=nil
   return res

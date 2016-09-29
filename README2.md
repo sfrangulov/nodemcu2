@@ -39,3 +39,4 @@ python "../esptool/esptool.py" --port /dev/cu.wchusbserialfa1340 --baud 115200 w
 
 Зашить все скрипты:
 nodemcu-tool upload *.lua
+nodemcu-tool upload *.json

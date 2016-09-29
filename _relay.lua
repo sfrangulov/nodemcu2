@@ -13,13 +13,13 @@ end
 function module.set(key, config, value)
   for rkey,rvalue in pairs(value) do
     gpio.write(config.pin, rvalue)
-    app.config.node.sensors[key].interval_tmp = app.config.node.sensors[key].interval
-    app.config.node.sensors[key].interval = 1
+    app.config.sensors[key].interval_tmp = app.config.sensors[key].interval
+    app.config.sensors[key].interval = 1
     if (rvalue == "1" and config.auto_off ~= nil) then
       tmr.alarm(6, config.auto_off * 1000, tmr.ALARM_SINGLE, function()
         gpio.write(config.pin, gpio.LOW)
-        app.config.node.sensors[key].interval = app.config.node.sensors[key].interval_tmp
-        app.config.node.sensors[key].interval_tmp = nil  
+        app.config.sensors[key].interval = app.config.sensors[key].interval_tmp
+        app.config.sensors[key].interval_tmp = nil  
       end)
     end
   end

@@ -1,0 +1,16 @@
+{
+    "dht11_1": {
+        "module": "_dht11",
+        "type": "dht11",
+        "pin": 1,
+        "pullup": false,
+        "interval": 10,
+        "mode": "change"
+    },
+    "bmp180_1": {
+        "module": "_bmp085",
+        "sda": 3,
+        "scl": 2,
+        "interval": 10
+    }
+}
