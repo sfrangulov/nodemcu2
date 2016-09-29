@@ -108,7 +108,7 @@ end
 
 function app.start()
     tmr.alarm(1, 1000, tmr.ALARM_AUTO, function()
-        if (app.mqtt.is_online() ~= 0) then
+        if (app.mqtt.is_online()) then
             tmr.stop(1)
             if (mdns ~= nil) then         
                 mdns.register(app.config.id, { description=app.config.id, service="telnet", port=23, location=app.config.node.location })

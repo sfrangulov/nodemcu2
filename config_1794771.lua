@@ -1,6 +1,4 @@
 local module = {
-    wifi = "iot",
-    mqtt = {"dev_int"},
     sensors = {
         dht11_1 = {module = "_dht11", type="dht11", pin = 1, pullup = false, interval = 10, mode = "change"}
         --,dht21_1 = {module = "_dht11", type="dht21", pin = 6, pullup = true, interval = 10, mode = "change"}
