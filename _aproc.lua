@@ -10,7 +10,7 @@ module.indicators = {
 }
 
 function module.get(key, config)
-  res = {}
+  local res = {}
   res.level = 100-100*adc.read(config.apin)/1024
   return res
 end

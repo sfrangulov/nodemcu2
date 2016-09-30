@@ -16,10 +16,10 @@ module.indicators = {
 }
 
 function module.get(key, config)
-  res = {}
+  local res = {}
   res.temperature = 0
   res.humidity = 0
-  dht=require("dht")
+  --dht=require("dht")
   if (config.type == "dht11") then
     status,temp,humi,temp_decimial,humi_decimial = dht.read11(config.pin)
   else
@@ -38,8 +38,8 @@ function module.get(key, config)
     res.temperature = app.config.data_error
     res.humidity = app.config.data_error
   end
-  dht=nil
-  package.loaded["dht"]=nil
+  --dht=nil
+  --package.loaded["dht"]=nil
   return res
 end
 

@@ -2,9 +2,6 @@ local app = {}
 app.iteration = 0
 app.config = require("config")
 app.mqtt = require("_mqtt")
-app.autodetect = require("autodetect")
-
-app.autodetect.start()
 
 
 function app.get_indicators()
@@ -113,7 +110,7 @@ end
 function app.start()
     tmr.alarm(1, 1000, tmr.ALARM_AUTO, function()
         if (app.mqtt.is_online()) then
-            tmr.stop(1)      
+            tmr.stop(1)   
             mdns.register(app.config.id, { description=app.config.id, service="telnet", port=23, location=app.config.location })
             prn("============ Ready ==============")
             for skey,svalue in pairs(app.config.sensors) do

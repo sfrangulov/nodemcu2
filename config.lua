@@ -15,7 +15,11 @@ module.mqtt = {
     hello_endpoint = "clients/"..module.id
 }
 
+module.interval = 10
+
 module.sensors = {}
+
+module.sensors_detected = {}
 
 module.location = ""
 
@@ -36,11 +40,19 @@ function module.json_config_load()
         file.close()
         prn("  MQTT config loaded")
     end
-    if (file.open(node.chipid().."_sensors.json")) then
-        module.sensors = cjson.decode(file.read())
-        file.close()
-        prn("  Sensors config loaded")
-    end           
+    --if (file.open(node.chipid().."_sensors.json")) then
+    --    module.sensors = cjson.decode(file.read())
+    --    file.close()
+    --    prn("  Sensors config loaded")
+    --else
+        prn("  No sensor config")
+        tmr.alarm(6, 5000, tmr.ALARM_SINGLE, function()
+            autodetect = require("autodetect")
+            autodetect.start() 
+            autodetect=nil
+            package.loaded["autodetect"]=nil  
+        end)
+    --end           
 end
 
 return module

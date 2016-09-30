@@ -13,13 +13,13 @@ end
 local function i2c_detect(iaddr, isda, iscl)
     local sensor = {}
     if (iaddr == "0x77") then
-        sensor = {module = "_bmp085", sda = isda, scl = iscl}
-        return cjson.encode(sensor)
+        sensor = {module = "_bmp085", sda = isda, scl = iscl, interval = app.config.interval}
+        return sensor
     end
     return nil
 end
 
-function module.i2c_scanner()
+function i2c_scanner()
     for scl=1,7 do
         for sda=1,7 do
             tmr.wdclr()
@@ -29,7 +29,7 @@ function module.i2c_scanner()
                         if find_dev(id, i)==true then
                             local sensor = i2c_detect("0x"..string.format("%02X",i), sda, scl)
                             if (sensor ~= nil) then
-                                prn(sensor)
+                                app.config.sensors_detected["ad_"..sensor.module.."_"..sensor.sda.."_"..sensor.scl] = deepcopy(sensor)
                             end
                         end
                 end
@@ -38,9 +38,29 @@ function module.i2c_scanner()
     end
 end
 
+function dht_scanner()
+  --dht=require("dht")
+  for pin=1,8 do
+    status,temp,humi,temp_decimial,humi_decimial = dht.read(pin)
+    dht_type = "dht22"
+    if( status ~= dht.OK ) then
+        status,temp,humi,temp_decimial,humi_decimial = dht.read11(pin)
+        dht_type = "dht11"    
+    end
+    if( status == dht.OK ) then
+        app.config.sensors_detected["ad__dht11_"..pin] = {module="_dht11", pin = pin, type = dht_type, interval = app.config.interval}
+    end  
+  end
+  --dht=nil
+  --package.loaded["dht"]=nil
+end
+
 function module.start()
     prn("============ Autod ==============")
-    module.i2c_scanner()    
+    i2c_scanner()
+    dht_scanner()
+    app.config.sensors = app.config.sensors_detected
+    prn("  Done")
 end
 
 return module

@@ -5,7 +5,7 @@ module.indicators = {
 }
 
 function module.get(key, config)
-  res = {}
+  local res = {}
   res.state = gpio.read(config.pin)
   return res
 end

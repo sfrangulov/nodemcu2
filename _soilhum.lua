@@ -5,7 +5,7 @@ module.indicators = {
 }
 
 function module.get(key, config)
-  res = {}
+  local res = {}
   res.humidity = 0
   gpio.write(config.pin, gpio.HIGH)
   tmr.delay(500)

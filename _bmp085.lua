@@ -6,7 +6,7 @@ module.indicators = {
 }
 
 function module.get(key, config)
-  res = {}
+  local res = {}
   res.temperature = 0
   res.pressure = 0
   bmp085=require("bmp085")
