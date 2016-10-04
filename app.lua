@@ -137,7 +137,6 @@ function app.init()
 end
 
 function app.timer()
-    collectgarbage()
     local res = {}
     for skey,svalue in pairs(app.config.sensors) do
         if (app.iteration%app.config.sensors[skey].interval == 0) then

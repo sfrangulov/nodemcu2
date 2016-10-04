@@ -16,8 +16,10 @@ local function wait_ip()
     prn("  MAC: " .. wifi.ap.getmac())
     prn("  SSID: ".._ssid)    
     prn("  IP: "..wifi.sta.getip())
-    prn("  Telnet port: 23")
-    telent.start()
+    prn("  Web: http://"..wifi.sta.getip().."/")
+    --_wificfg.web()
+    --prn("  Telnet port: 23")
+    --telent.start()
     _cb()
   end
 end
