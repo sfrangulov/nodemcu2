@@ -1,10 +1,16 @@
 local module = {}
 
+local restart = false
+
 local function validateParam(p)
-    local v = {"wifissid", "wifipassword", "mqtthost", "mqttport", "mqttlogin", "mqttpassword"}
-    for i in v do
-    end
     prn(cjson.encode(p))
+    local v = {"wifissid", "wifipassword", "mqtthost", "mqttport", "mqttlogin", "mqttpassword"}
+    for i, val in ipairs(v) do
+        if (p[val] == nil) then
+            return false
+        end
+    end
+    return true
 end
 
 function module.web()
@@ -18,12 +24,38 @@ function module.web()
             end
             local _GET = {}
             if (vars ~= nil)then
-                for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
+                for k, v in string.gmatch(vars, "([%w%._]+)=([%w%._]+)&*") do
                     _GET[k] = v
                 end
-            end
+            end           
             if (vars ~= nil and path == '/') then
-                validateParam(_GET)    
+                if (validateParam(_GET)) then
+                    response = {
+                        'HTTP/1.1 200 OK\n\n',
+                        '<!DOCTYPE html>\n',
+                        '<html>\n',
+                        '<head><meta  content="text/html; charset=utf-8">\n',
+                        '<title>' .. app.config.id .. 'configuration</title></head>\n',
+                        '<body><b>Configuration saved. Please, close this page</b>',
+                        '</body></html>\n'
+                    }
+                    if file.open(node.chipid().."_connection.json", "w+") then
+                        file.write(cjson.encode(_GET))
+                        file.close()
+                        restart = true
+                    end               
+                else
+                    response = {
+                        'HTTP/1.1 200 OK\n\n',
+                        '<!DOCTYPE html>\n',
+                        '<html>\n',
+                        '<head><meta  content="text/html; charset=utf-8">\n',
+                        '<title>' .. app.config.id .. ' configuration</title></head>\n',
+                        '<body><b>Error in configuration</b><br><br>',
+                        '<a href="http:\\\\'.. app.config.ap.ip.ip ..'\\">Back</a>\n',
+                        '</body></html>\n'
+                    }               
+                end        
             end
             if (vars == nil and path == '/') then
                 response = {
@@ -31,7 +63,7 @@ function module.web()
                     '<!DOCTYPE html>\n',
                     '<html>\n',
                     '<head><meta  content="text/html; charset=utf-8">\n',
-                    '<title>' .. app.config.id .. 'configuration</title></head>\n',
+                    '<title>' .. app.config.id .. ' configuration</title></head>\n',
                     '<form action="" method="GET">\n',
                     '<table border=0><td>Node ID: </td><td>' .. app.config.id .. '</td></tr>\n',
                     '<td>MAC Address: </td><td>' .. wifi.ap.getmac() .. '</td></tr>\n',
@@ -51,7 +83,11 @@ function module.web()
             end
             local function sender (sck)
                 if #response > 0 then sck:send(table.remove(response, 1))
-                else sck:close()
+                else
+                    sck:close()
+                    if (restart == true) then
+                        node.restart()
+                    end
                 end
             end
             sck:on("sent", sender)
@@ -62,8 +98,7 @@ end
 
 function module.start()
     prn("============ WiFiC ==============")
-    --wifi.setmode(wifi.SOFTAP)
-    wifi.setmode(wifi.STATIONAP)
+    wifi.setmode(wifi.SOFTAP)
     wifi.setphymode(wifi.PHYMODE_N)
     wifi.ap.config(app.config.ap)
     wifi.ap.setip(app.config.ap.ip)

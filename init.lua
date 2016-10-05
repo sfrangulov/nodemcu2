@@ -6,9 +6,9 @@ app = require("app")
 
 app.config.json_config_load()
 
-if (app.config.wifi ~= nil) then
-    _wifi.start(app.config.wifi.ssid,
-                app.config.wifi.password,
+if (app.config.connection ~= nil) then
+    _wifi.start(app.config.connection.wifissid,
+                app.config.connection.wifipassword,
                 app.mqtt.start)
     app.start()
 else

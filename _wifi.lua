@@ -27,6 +27,7 @@ end
 local function connect()  
     wifi.sta.config(_ssid, _password)
     wifi.sta.connect()
+    wifi.sta.autoconnect(1)
     tmr.alarm(0, 2000, tmr.ALARM_AUTO, wait_ip)
 end
 

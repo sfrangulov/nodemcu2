@@ -2,11 +2,6 @@ local module = {}
 
 module.id = "ESP8266_"..node.chipid()
 
---module.wifi = {
---    ssid = "iot",
---    password = "Kitty12345"
---}
-
 module.ap= {
     ssid=module.id,
     pwd="Kitty12345",
@@ -27,14 +22,6 @@ module.ap.dhcp = {
     start="192.168.222.2"
 }
 
-module.mqtt = {
-    host = "192.168.100.68",
-    port = 1883,
-    data_endpoint = "data/"..module.id,
-    task_endpoint = "task/"..module.id,
-    hello_endpoint = "clients/"..module.id
-}
-
 module.interval = 10
 
 module.sensors = {}
@@ -47,23 +34,16 @@ module.data_error = -999999
 
 function module.json_config_load()
     prn("============ Confi ==============")
-    if (file.open(node.chipid().."_wifi.json")) then
-        module.wifi = cjson.decode(file.read())
+    if (file.open(node.chipid().."_connection.json")) then
+        module.connection = cjson.decode(file.read())
+        module.connection.mqttdataendpoint = "data/"..module.id
+        module.connection.mqtttaskendpoint = "task/"..module.id
+        module.connection.mqtthelloendpoint ="clients/"..module.id
         file.close()
-        prn("  WiFi config loaded")
+        prn("  Connection config loaded")
     else
-        prn("  No WiFi config")
+        prn("  No connection config")
         return
-    end
-    if (file.open(node.chipid().."_mqtt.json")) then
-        module.mqtt = cjson.decode(file.read())
-        module.mqtt.data_endpoint = module.mqtt.data_endpoint..module.id
-        module.mqtt.task_endpoint = module.mqtt.task_endpoint..module.id
-        module.mqtt.hello_endpoint = module.mqtt.hello_endpoint..module.id
-        file.close()
-        prn("  MQTT config loaded")
-    else
-        prn("  No MQTT config")
     end
     if (file.open(node.chipid().."_sensors.json")) then
         module.sensors = cjson.decode(file.read())
