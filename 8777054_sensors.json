@@ -1,0 +1,22 @@
+{
+    "dht22_1": {
+        "module": "_dht11",
+        "type": "dht22",
+        "pin": 1,
+        "pullup": true,
+        "interval": 10
+    },
+    "dht21_1": {
+        "module": "_dht11",
+        "type": "dht21",
+        "pin": 2,
+        "pullup": true,
+        "interval": 10
+    },
+    "bmp085_1": {
+        "module": "_bmp085",
+        "sda": 6,
+        "scl": 5,
+        "interval": 10
+    }
+}

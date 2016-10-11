@@ -1,6 +1,6 @@
 {
     "baudrate": "115200",
-    "port": "/dev/cu.SLAB_USBtoUART",
+    "port": "/dev/cu.wchusbserialfa1340",
     "optimize": true,
     "compile": false,
     "keeppath": true
