@@ -1,3 +1,6 @@
 .DS_Store
 .vscode
 misc/firmware/nodemcu.bin
+misc/mqttgw/node_modules
+**/*.log
+*.log

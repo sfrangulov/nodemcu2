@@ -1,0 +1,1 @@
+nssm.exe install mqttgw C:\Users\frangulov_su\AppData\Roaming\npm\forever.cmd --sourceDir D:\mqttgw --workingDir D:\mqttgw -o D:\mqttgw\logs\out.log -e D:\mqttgw\logs\err.log -l D:\mqttgw\logs\app.log -a index.js
