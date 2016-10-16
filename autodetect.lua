@@ -60,6 +60,7 @@ function module.start()
     i2c_scanner()
     dht_scanner()
     app.config.sensors = app.config.sensors_detected
+    prn(cjson.encode(app.config.sensors))
     prn("  Done")
 end
 

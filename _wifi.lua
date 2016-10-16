@@ -1,6 +1,6 @@
 local module = {}
 
-local telent = require("telnet")
+--local telent = require("telnet")
 
 local _ssid = ""
 local _password = ""
@@ -18,8 +18,8 @@ local function wait_ip()
     prn("  IP: "..wifi.sta.getip())
     --prn("  Web: http://"..wifi.sta.getip().."/")
     --_wificfg.web()
-    prn("  Telnet port: 23")
-    telent.start()
+    --prn("  Telnet port: 23")
+    --telent.start()
     _cb()
   end
 end

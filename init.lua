@@ -1,7 +1,6 @@
 table = require("table")
 dofile("misc.lua")
 _wifi = require("_wifi")
-_wificfg = require("_wificfg")
 app = require("app")
 
 app.config.json_config_load()
@@ -12,5 +11,6 @@ if (app.config.connection ~= nil) then
                 app.mqtt.start)
     app.start()
 else
+    _wificfg = require("_wificfg")
     _wificfg.start()
 end

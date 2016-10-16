@@ -1,5 +1,7 @@
 function prn(value)
-    print(value)
+    if (app.config.prn == true) then
+        print(value)
+    end
 end
 
 function split(inputstr, sep)

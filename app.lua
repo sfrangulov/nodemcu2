@@ -120,9 +120,9 @@ function app.start()
                     i = app[app.config.sensors[skey].module].indicators[svalue.type]    
                 end
                 app.config.sensors[skey].indicators = deepcopy(i)
-            end
+            end          
             app.hello()
-            app.init()
+            app.init()            
             tmr.alarm(1, 1000, tmr.ALARM_AUTO, app.timer)           
         end
     end)

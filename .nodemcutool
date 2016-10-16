@@ -1,6 +1,6 @@
 {
     "baudrate": "115200",
-    "port": "/dev/cu.wchusbserialfa1340",
+    "port": "COM4",
     "optimize": true,
     "compile": false,
     "keeppath": true

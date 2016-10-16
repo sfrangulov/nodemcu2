@@ -24,6 +24,8 @@ module.ap.dhcp = {
 
 module.interval = 10
 
+module.autodetect = true
+
 module.sensors = {}
 
 module.sensors_detected = {}
@@ -31,6 +33,8 @@ module.sensors_detected = {}
 module.location = ""
 
 module.data_error = -999999
+
+module.prn = true
 
 function module.json_config_load()
     prn("============ Confi ==============")
@@ -50,13 +54,18 @@ function module.json_config_load()
         file.close()
         prn("  Sensors config loaded")
     else
-        prn("  No sensor config")
-        tmr.alarm(6, 5000, tmr.ALARM_SINGLE, function()
-            autodetect = require("autodetect")
-            autodetect.start() 
-            autodetect=nil
-            package.loaded["autodetect"]=nil  
-        end)
+        prn("  No sensor config. Will try to detect in 5 sec...")
+        if (module.autodetect == true) then
+            tmr.alarm(6, 5000, tmr.ALARM_SINGLE, function()
+                autodetect = require("autodetect")
+                autodetect.start() 
+                autodetect=nil
+                package.loaded["autodetect"]=nil  
+            end)
+        else
+            prn("  Autodetect disabled in config. Skiped")
+        end
+
     end           
 end
 
